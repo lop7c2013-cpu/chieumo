@@ -3,371 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FC Mobile - Premier League Stars</title>
+    <title>FC Mobile 25 - Walkout Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&display=swap');
         
-        body {
-            margin: 0;
-            background-color: #050505;
-            color: white;
-            font-family: 'Teko', sans-serif;
-            overflow: hidden;
+        body { 
+            margin: 0; background-color: #000; color: white; 
+            font-family: 'Teko', sans-serif; overflow: hidden; height: 100vh; 
             user-select: none;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        #lobby {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, #050505 0%, #1a1a1a 50%, #050505 100%);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            z-index: 50;
+        /* --- GIAO DIỆN CHÍNH (LOBBY) --- */
+        #lobby { 
+            height: 100vh; 
+            background: radial-gradient(circle at 50% 30%, #1e1b4b 0%, #000 100%); 
+            display: flex; flex-direction: column; padding: 20px; 
         }
 
-        .btn-pack {
-            width: 100%;
-            max-width: 400px;
-            height: 120px;
-            margin: auto;
-            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-            border-radius: 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 3px solid rgba(255,255,255,0.4);
-            box-shadow: 0 10px 40px rgba(217, 119, 6, 0.4);
-            transition: transform 0.1s;
-        }
-
-        .btn-pack:active { transform: scale(0.95); }
-
-        #pack-screen {
-            position: fixed;
-            inset: 0;
-            background: #000;
-            z-index: 100;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .reveal-stage {
-            display: none;
-            text-align: center;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .player-card {
-            width: 320px;
-            height: 475px;
-            background: url('https://fifarenderz.com/static/img/cards/Lvl99.png') no-repeat center center;
-            background-size: contain;
-            position: relative;
-            display: none;
-            animation: cardReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes cardReveal {
-            0% { transform: rotateY(180deg) scale(0.5); opacity: 0; }
-            100% { transform: rotateY(0deg) scale(1); opacity: 1; }
-        }
-
-        .ovr-val { position: absolute; top: 60px; left: 50px; font-size: 70px; font-weight: 900; color: #2e1800; line-height: 1; }
-        .pos-val { position: absolute; top: 125px; left: 60px; font-size: 24px; font-weight: bold; color: #2e1800; opacity: 0.8; }
-        
-        .name-val {
-            position: absolute;
-            top: 24px;
-            width: 100%;
-            text-align: center;
-            font-size: 30px;
-            font-weight: 900;
-            color: #2e1800;
-            text-transform: uppercase;
-            letter-spacing: -0.5px;
-            z-index: 30;
-            padding: 0 15px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .face-img {
-            position: absolute;
-            top: 75px; 
-            right: 15px;
-            width: 230px;
-            height: 230px;
-            object-fit: contain;
-            z-index: 10;
-        }
-
+        /* Bảng tỉ lệ góc màn hình */
         .stats-box {
-            position: absolute;
-            bottom: 80px;
-            width: 100%;
-            padding: 0 40px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2px 20px;
-            color: #2e1800;
-            font-size: 22px;
-            font-weight: bold;
-            z-index: 20;
+            position: absolute; top: 75px; right: 20px;
+            background: rgba(0, 0, 0, 0.7); border: 1px solid #fbbf24;
+            padding: 10px 15px; border-radius: 12px; text-align: right;
+            backdrop-filter: blur(10px); z-index: 100;
         }
 
-        .post-reveal-nav {
-            display: none;
-            gap: 12px;
-            width: 320px;
-            margin-top: 20px;
-            z-index: 200;
+        .btn-recruit { 
+            height: 100px; background: linear-gradient(135deg, #fbbf24, #b45309); 
+            color: black; border-radius: 20px; border: 4px solid rgba(255,255,255,0.4);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            cursor: pointer; transition: 0.2s; box-shadow: 0 0 30px rgba(251,191,36,0.2);
+        }
+        .btn-recruit:active { transform: scale(0.95); }
+
+        .btn-myteam-huge { 
+            width: 100%; height: 110px; background: linear-gradient(to right, #111827, #1f2937, #111827);
+            border: 4px solid #fbbf24; border-radius: 25px; display: flex;
+            align-items: center; justify-content: center; gap: 20px; cursor: pointer;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
-        .nav-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            font-weight: 900;
-            font-size: 18px;
-            text-transform: uppercase;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
+        /* --- HIỆU ỨNG WALKOUT (REVEAL) --- */
+        #walkout-overlay {
+            position: fixed; inset: 0; background: black; z-index: 5000;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        .nav-btn:active { transform: scale(0.9); }
-        .btn-ok { background: linear-gradient(to bottom, #fbbf24, #d97706); color: white; box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4); }
-        .btn-back { background: #1a1a1a; color: white; border: 2px solid #fbbf24; }
+        .walkout-step {
+            position: absolute; display: none; flex-direction: column; align-items: center;
+            animation: zoom-in 0.8s ease-out forwards;
+        }
+        @keyframes zoom-in {
+            0% { transform: scale(0.3); opacity: 0; filter: blur(20px); }
+            100% { transform: scale(1.2); opacity: 1; filter: blur(0); }
+        }
 
+        .flag-img { width: 250px; height: 150px; object-fit: cover; border: 4px solid white; box-shadow: 0 0 50px rgba(255,255,255,0.4); }
+        .pos-text { font-size: 180px; font-weight: 900; font-style: italic; color: white; line-height: 0.8; }
+        .club-img { width: 180px; height: 180px; filter: drop-shadow(0 0 30px white); }
+
+        /* Thẻ cầu thủ cuối cùng */
+        .final-card {
+            width: 280px; height: 415px; background-size: contain; background-repeat: no-repeat;
+            position: relative; display: none;
+            animation: card-reveal 0.6s cubic-bezier(0.17, 0.89, 0.32, 1.49);
+        }
+        @keyframes card-reveal { 0% { transform: scale(0) rotate(-15deg); } 100% { transform: scale(1) rotate(0); } }
+
+        .ovr-val { position: absolute; top: 54px; left: 45px; font-size: 60px; font-weight: 900; color: #2e1800; line-height: 1; }
+        .name-val { position: absolute; bottom: 42px; width: 100%; text-align: center; font-size: 26px; font-weight: 900; color: #2e1800; text-transform: uppercase; }
+        .face-img { position: absolute; top: 65px; right: 12px; width: 200px; height: 200px; object-fit: contain; }
+
+        .flash { position: fixed; inset: 0; background: white; z-index: 6000; opacity: 0; pointer-events: none; }
+        .flash.active { animation: flash-anim 0.5s ease-out; }
+        @keyframes flash-anim { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+        /* --- QUẢN LÝ ĐỘI HÌNH (SQUAD) --- */
+        .squad-overlay { position: fixed; inset: 0; background: #050505; z-index: 1000; display: none; padding: 20px; flex-direction: column; }
+        .squad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; overflow-y: auto; padding-bottom: 20px; }
+        .player-slot { aspect-ratio: 2/3; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+        .slot-img { width: 85%; object-fit: contain; }
+        .slot-ovr { position: absolute; top: 4px; left: 6px; color: #fbbf24; font-weight: 900; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div id="lobby">
-    <div class="flex justify-between items-start z-10">
+    <div class="flex justify-between items-center">
         <div>
-            <h1 class="text-6xl font-black italic tracking-tighter">FC <span class="text-yellow-500">25</span></h1>
-            <p class="text-white/40 font-bold uppercase tracking-widest text-sm">North London Update</p>
+            <h1 class="text-6xl font-black italic leading-none">FC <span class="text-yellow-500">25</span></h1>
+            <p class="text-white/20 font-bold text-xs tracking-widest uppercase">Mobile Gacha Version</p>
         </div>
-        <div class="text-right">
-            <div class="bg-red-600 px-3 py-1 rounded font-black italic text-sm">LIVE EVENT</div>
-            <p class="text-white font-bold mt-1 text-lg leading-tight uppercase">Arsenal & Spurs</p>
+        <div class="bg-zinc-900 px-4 py-1 rounded-full border border-yellow-500/30">
+            <span class="text-yellow-500 font-bold">🪙</span> <span id="coin-txt" class="text-xl font-bold">1,000,000</span>
         </div>
     </div>
 
-    <div class="btn-pack" onclick="openPack()">
-        <span class="text-black text-5xl font-black italic">MỞ GÓI THẺ</span>
-        <span class="text-black/60 text-sm font-bold uppercase tracking-[0.2em]">Săn Rice, Ødegaard & Lukaku</span>
+    <div class="stats-box">
+        <p class="text-[10px] text-gray-500 font-bold uppercase mb-1">Số lượt quay: <span id="pull-count" class="text-white">0</span></p>
+        <div class="flex flex-col text-sm font-black italic leading-tight">
+            <span class="text-blue-400">SIÊU XỊN: 20%</span>
+            <span class="text-yellow-500">THƯỜNG: 40%</span>
+            <span class="text-red-500">LỎ: 40%</span>
+        </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-3 z-10">
-        <div class="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10">
-            <p class="text-yellow-500 font-bold text-[10px] uppercase">Arsenal Captain</p>
-            <p class="text-xl font-black italic">MARTIN ØDEGAARD</p>
+    <div class="mt-14">
+        <div class="btn-recruit" onclick="handleGacha()">
+            <span class="text-4xl font-black italic">MỞ GÓI PREMIUM</span>
+            <span class="text-sm font-bold uppercase opacity-80 italic">50,000 XU / LƯỢT</span>
         </div>
-        <div class="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10">
-            <p class="text-yellow-500 font-bold text-[10px] uppercase">Midfield Wall</p>
-            <p class="text-xl font-black italic text-blue-400">DECLAN RICE</p>
+    </div>
+
+    <div class="mt-8 bg-white/5 p-4 rounded-2xl border border-white/10 text-center">
+        <p class="text-yellow-500 font-bold text-xs uppercase tracking-widest mb-1">Sự kiện TOTS</p>
+        <p class="text-2xl font-black italic leading-none">CƠ HỘI NHẬN MESSI 99 OVR</p>
+    </div>
+
+    <div class="bottom-nav mt-auto pb-4">
+        <div class="btn-myteam-huge shadow-2xl" onclick="openSquad()">
+            <div class="w-16 h-16 bg-yellow-500 rounded-2xl flex items-center justify-center rotate-3">
+                <svg class="w-10 h-10 text-black" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3.005 3.005 0 013.75-2.906z"></path></svg>
+            </div>
+            <div class="text-left">
+                <p class="text-4xl font-black italic leading-none uppercase">My Team</p>
+                <p class="text-[10px] font-bold text-yellow-500 uppercase tracking-widest">Đội hình: <span id="team-count">0</span> cầu thủ</p>
+            </div>
         </div>
     </div>
 </div>
 
-<div id="pack-screen">
-    <div id="s1" class="reveal-stage">
-        <p class="text-xl font-bold text-white/20 mb-6 tracking-[0.5em]">QUỐC GIA</p>
-        <img id="r-flag" src="" class="w-72 h-44 object-cover rounded-lg shadow-2xl border-2 border-white/10 mx-auto">
-    </div>
+<div id="walkout-overlay">
+    <div id="flash" class="flash"></div>
 
-    <div id="s2" class="reveal-stage">
-        <p class="text-xl font-bold text-white/20 mb-6 tracking-[0.5em]">VỊ TRÍ</p>
-        <h2 id="r-pos" class="text-[15rem] font-black italic text-yellow-500 leading-none">CDM</h2>
-    </div>
+    <div id="step-flag" class="walkout-step"><p class="text-white/40 font-bold mb-4 tracking-[0.5em]">NATION</p><img id="w-flag" src="" class="flag-img"></div>
+    <div id="step-pos" class="walkout-step"><p class="text-white/40 font-bold mb-4 tracking-[0.5em]">POSITION</p><div id="w-pos" class="pos-text"></div></div>
+    <div id="step-club" class="walkout-step"><p class="text-white/40 font-bold mb-4 tracking-[0.5em]">CLUB</p><img id="w-club" src="" class="club-img"></div>
 
-    <div id="s3" class="reveal-stage">
-        <p class="text-xl font-bold text-white/20 mb-6 tracking-[0.5em]">CÂU LẠC BỘ</p>
-        <div id="r-club" class="text-4xl font-black italic uppercase text-white border-y-2 border-white/10 py-6 px-10 text-center">ARSENAL</div>
-    </div>
-
-    <div id="final-card" class="player-card">
-        <div id="c-name" class="name-val">PLAYER NAME</div>
-        <div id="c-ovr" class="ovr-val">99</div>
-        <div id="c-pos" class="pos-val">CDM</div>
-        <img id="c-face" src="" class="face-img">
-        
-        <div class="stats-box">
-            <div class="flex justify-between"><span>PAC</span><span id="st-pac">99</span></div>
-            <div class="flex justify-between"><span>DRI</span><span id="st-dri">99</span></div>
-            <div class="flex justify-between"><span>SHO</span><span id="st-sho">99</span></div>
-            <div class="flex justify-between"><span>DEF</span><span id="st-def">99</span></div>
-            <div class="flex justify-between"><span>PAS</span><span id="st-pas">99</span></div>
-            <div class="flex justify-between"><span>PHY</span><span id="st-phy">99</span></div>
+    <div id="step-final" class="flex flex-col items-center">
+        <div id="final-card" class="final-card">
+            <div id="g-ovr" class="ovr-val"></div>
+            <img id="g-face" src="" class="face-img">
+            <div id="g-name" class="name-val"></div>
+        </div>
+        <div id="final-nav" class="hidden mt-10">
+            <button class="px-16 py-4 bg-white text-black font-black rounded-full text-2xl active:scale-90 transition-transform shadow-xl" onclick="confirmCollect()">NHẬN CẦU THỦ</button>
         </div>
     </div>
+</div>
 
-    <div id="final-nav" class="post-reveal-nav">
-        <div onclick="backToCard()" class="nav-btn btn-back">XEM LẠI</div>
-        <div onclick="closePack()" class="nav-btn btn-ok">QUAY TIẾP</div>
+<div id="squad-overlay" class="squad-overlay">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-5xl font-black italic text-yellow-500 uppercase">My Squad</h2>
+        <button onclick="closeSquad()" class="px-6 py-2 bg-zinc-800 rounded-xl font-bold uppercase text-sm tracking-widest">Đóng</button>
     </div>
+    <div id="squad-grid" class="squad-grid"></div>
 </div>
 
 <script>
-    const PLAYERS = [
-        { 
-            name: "DECLAN RICE", 
-            ovr: 98, 
-            pos: "CDM", 
-            club: "ARSENAL", 
-            flag: "https://flagcdn.com/w640/gb-eng.png", 
-            face: "https://fifarenderz.com/static/img/players/p234396.png",
-            stats: [84, 82, 78, 86, 96, 92]
-        },
-        { 
-            name: "MARTIN ØDEGAARD", 
-            ovr: 100, 
-            pos: "CAM", 
-            club: "ARSENAL", 
-            flag: "https://flagcdn.com/w640/no.png", 
-            face: "https://fifarenderz.com/static/img/players/p222492.png",
-            stats: [86, 92, 102, 104, 60, 75]
-        },
-        { 
-            name: "JAMES MADDISON", 
-            ovr: 97, 
-            pos: "CAM", 
-            club: "TOTTENHAM", 
-            flag: "https://flagcdn.com/w640/gb-eng.png", 
-            face: "https://fifarenderz.com/static/img/players/p220697.png",
-            stats: [82, 90, 100, 98, 55, 72]
-        },
-        { 
-            name: "ROMELU LUKAKU", 
-            ovr: 96, 
-            pos: "ST", 
-            club: "AS ROMA", 
-            flag: "https://flagcdn.com/w640/be.png", 
-            face: "https://fifarenderz.com/static/img/players/p192505.png",
-            stats: [90, 101, 75, 88, 40, 102]
-        },
-        { 
-            name: "RUUD GULLIT", 
-            ovr: 108, 
-            pos: "CM", 
-            club: "AC MILAN", 
-            flag: "https://flagcdn.com/w640/nl.png", 
-            face: "https://fifarenderz.com/static/img/players/p214048.png",
-            stats: [98, 102, 105, 104, 98, 106]
-        },
-        { 
-            name: "CRISTIANO RONALDO", 
-            ovr: 107, 
-            pos: "ST", 
-            club: "AL NASSR", 
-            flag: "https://flagcdn.com/w640/pt.png", 
-            face: "https://fifarenderz.com/static/img/players/p20801.png",
-            stats: [102, 112, 88, 105, 42, 95]
-        },
-        { 
-            name: "SON HEUNG-MIN", 
-            ovr: 101, 
-            pos: "LW", 
-            club: "TOTTENHAM", 
-            flag: "https://flagcdn.com/w640/kr.png", 
-            face: "https://fifarenderz.com/static/img/players/p200104.png",
-            stats: [105, 102, 94, 104, 48, 78]
-        },
-        { 
-            name: "LUKA MODRIĆ", 
-            ovr: 102, 
-            pos: "CM", 
-            club: "REAL MADRID", 
-            flag: "https://flagcdn.com/w640/hr.png", 
-            face: "https://fifarenderz.com/static/img/players/p177003.png",
-            stats: [82, 88, 110, 98, 80, 75]
-        },
-        { 
-            name: "LIONEL MESSI", 
-            ovr: 105, 
-            pos: "RW", 
-            club: "INTER MIAMI", 
-            flag: "https://flagcdn.com/w640/ar.png", 
-            face: "https://fifarenderz.com/static/img/players/p158023.png",
-            stats: [99, 105, 108, 110, 45, 82]
+    let coins = 1000000;
+    let myTeam = [];
+    let currentP = null;
+    let pulls = 0;
+
+    const DATA = {
+        legends: [ // 20% - SIÊU XỊN (Hệ thống Walkout)
+            { name: "L. Messi", ovr: 99, pos: "RW", nation: "https://flagcdn.com/w320/ar.png", club: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/Inter_Miami_CF_logo.svg/200px-Inter_Miami_CF_logo.svg.png", face: "https://fifarenderz.com/static/img/players/p158023.png", card: "https://fifarenderz.com/static/img/cards/Lvl99.png" },
+            { name: "C. Ronaldo", ovr: 98, pos: "ST", nation: "https://flagcdn.com/w320/pt.png", club: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/Al_Nassr_FC_logo.svg/200px-Al_Nassr_FC_logo.svg.png", face: "https://fifarenderz.com/static/img/players/p20801.png", card: "https://fifarenderz.com/static/img/cards/Lvl99.png" },
+            { name: "Mbappe", ovr: 97, pos: "ST", nation: "https://flagcdn.com/w320/fr.png", club: "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/200px-Real_Madrid_CF.svg.png", face: "https://fifarenderz.com/static/img/players/p231747.png", card: "https://fifarenderz.com/static/img/cards/Lvl99.png" }
+        ],
+        golds: [ // 40% - THƯỜNG
+            { name: "Bellingham", ovr: 88, pos: "CM", face: "https://fifarenderz.com/static/img/players/p252371.png", card: "https://fifarenderz.com/static/img/cards/Lvl89.png" },
+            { name: "Vinicius Jr", ovr: 89, pos: "LW", face: "https://fifarenderz.com/static/img/players/p238794.png", card: "https://fifarenderz.com/static/img/cards/Lvl89.png" },
+            { name: "De Bruyne", ovr: 88, pos: "CAM", face: "https://fifarenderz.com/static/img/players/p192985.png", card: "https://fifarenderz.com/static/img/cards/Lvl89.png" }
+        ],
+        trashes: [ // 40% - LỎ
+            { name: "Antony", ovr: 65, pos: "RW", face: "https://fifarenderz.com/static/img/players/p255475.png", card: "https://fifarenderz.com/static/img/cards/Lvl69.png" },
+            { name: "Maguire", ovr: 66, pos: "CB", face: "https://fifarenderz.com/static/img/players/p203263.png", card: "https://fifarenderz.com/static/img/cards/Lvl69.png" },
+            { name: "Mudryk", ovr: 64, pos: "LM", face: "https://fifarenderz.com/static/img/players/p246341.png", card: "https://fifarenderz.com/static/img/cards/Lvl69.png" }
+        ]
+    };
+
+    function updateLobby() {
+        document.getElementById('coin-txt').innerText = coins.toLocaleString();
+        document.getElementById('pull-count').innerText = pulls;
+        document.getElementById('team-count').innerText = myTeam.length;
+    }
+
+    function handleGacha() {
+        if(coins < 50000) return alert("Hết tiền rồi bro!");
+        coins -= 50000;
+        pulls++;
+        updateLobby();
+
+        let rand = Math.random() * 100;
+        let isWalkout = false;
+
+        // TỈ LỆ: 20% Xịn - 40% Thường - 40% Lỏ
+        if (rand < 20) {
+            currentP = DATA.legends[Math.floor(Math.random() * DATA.legends.length)];
+            isWalkout = true;
+        } else if (rand < 60) {
+            currentP = DATA.golds[Math.floor(Math.random() * DATA.golds.length)];
+        } else {
+            currentP = DATA.trashes[Math.floor(Math.random() * DATA.trashes.length)];
         }
-    ];
 
-    function openPack() {
-        const p = PLAYERS[Math.floor(Math.random() * PLAYERS.length)];
-        
-        document.getElementById('lobby').style.display = 'none';
-        document.getElementById('pack-screen').style.display = 'flex';
-        document.getElementById('final-nav').style.display = 'none';
-        
-        const stages = ['s1', 's2', 's3', 'final-card'];
-        stages.forEach(s => document.getElementById(s).style.display = 'none');
-
-        // Animation sequence
-        setTimeout(() => {
-            document.getElementById('r-flag').src = p.flag;
-            document.getElementById('s1').style.display = 'block';
-        }, 400);
-
-        setTimeout(() => {
-            document.getElementById('s1').style.display = 'none';
-            document.getElementById('r-pos').innerText = p.pos;
-            document.getElementById('s2').style.display = 'block';
-        }, 1500);
-
-        setTimeout(() => {
-            document.getElementById('s2').style.display = 'none';
-            document.getElementById('r-club').innerText = p.club;
-            document.getElementById('s3').style.display = 'block';
-        }, 2600);
-
-        setTimeout(() => {
-            document.getElementById('s3').style.display = 'none';
-            document.getElementById('c-name').innerText = p.name;
-            document.getElementById('c-ovr').innerText = p.ovr;
-            document.getElementById('c-pos').innerText = p.pos;
-            document.getElementById('c-face').src = p.face;
-            
-            const statsIds = ['st-pac', 'st-sho', 'st-pas', 'st-dri', 'st-def', 'st-phy'];
-            p.stats.forEach((v, i) => document.getElementById(statsIds[i]).innerText = v);
-
-            document.getElementById('final-card').style.display = 'block';
-            
-            setTimeout(() => {
-                document.getElementById('final-nav').style.display = 'flex';
-            }, 800);
-        }, 3800);
+        document.getElementById('walkout-overlay').style.display = 'flex';
+        if (isWalkout) runWalkoutSequence(); else runFastReveal();
     }
 
-    function backToCard() {
-        const card = document.getElementById('final-card');
-        card.style.transform = "scale(1.08) translateY(-10px)";
-        setTimeout(() => card.style.transform = "scale(1) translateY(0px)", 300);
+    async function runWalkoutSequence() {
+        // Reset hiển thị
+        document.querySelectorAll('.walkout-step').forEach(s => s.style.display = 'none');
+        document.getElementById('final-card').style.display = 'none';
+        document.getElementById('final-nav').classList.add('hidden');
+
+        // Cập nhật dữ liệu Walkout
+        document.getElementById('w-flag').src = currentP.nation;
+        document.getElementById('w-pos').innerText = currentP.pos;
+        document.getElementById('w-club').src = currentP.club;
+        setupCard();
+
+        const steps = ['step-flag', 'step-pos', 'step-club'];
+        for (let id of steps) {
+            const el = document.getElementById(id);
+            el.style.display = 'flex';
+            await new Promise(r => setTimeout(r, 1000));
+            el.style.display = 'none';
+        }
+        triggerFinalReveal();
     }
 
-    function closePack() {
-        document.getElementById('pack-screen').style.display = 'none';
-        document.getElementById('lobby').style.display = 'flex';
+    async function runFastReveal() {
+        setupCard();
+        document.querySelectorAll('.walkout-step').forEach(s => s.style.display = 'none');
+        document.getElementById('final-card').style.display = 'none';
+        document.getElementById('final-nav').classList.add('hidden');
+        await new Promise(r => setTimeout(r, 600)); // Delay ngắn cho hàng thường/lỏ
+        triggerFinalReveal();
     }
+
+    function setupCard() {
+        document.getElementById('g-ovr').innerText = currentP.ovr;
+        document.getElementById('g-name').innerText = currentP.name;
+        document.getElementById('g-face').src = currentP.face;
+        document.getElementById('final-card').style.backgroundImage = `url(${currentP.card})`;
+    }
+
+    function triggerFinalReveal() {
+        const flash = document.getElementById('flash');
+        flash.classList.add('active');
+        setTimeout(() => flash.classList.remove('active'), 500);
+
+        document.getElementById('final-card').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('final-nav').classList.remove('hidden');
+        }, 600);
+    }
+
+    function confirmCollect() {
+        myTeam.unshift(currentP);
+        document.getElementById('walkout-overlay').style.display = 'none';
+        updateLobby();
+    }
+
+    function openSquad() {
+        document.getElementById('squad-overlay').style.display = 'flex';
+        const grid = document.getElementById('squad-grid');
+        grid.innerHTML = '';
+        myTeam.forEach(p => {
+            grid.innerHTML += `
+                <div class="player-slot">
+                    <span class="slot-ovr">${p.ovr}</span>
+                    <img src="${p.face}" class="slot-img">
+                    <p class="text-[11px] font-bold uppercase truncate w-full text-center px-1">${p.name}</p>
+                </div>
+            `;
+        });
+    }
+
+    function closeSquad() { document.getElementById('squad-overlay').style.display = 'none'; }
+    
+    updateLobby();
 </script>
+
 </body>
 </html>
