@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FC Mobile - Premier League Stars</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&display=swap');
+        
+        body {
+            margin: 0;
+            background-color: #050505;
+            color: white;
+            font-family: 'Teko', sans-serif;
+            overflow: hidden;
+            user-select: none;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #lobby {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #050505 0%, #1a1a1a 50%, #050505 100%);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            z-index: 50;
+        }
+
+        .btn-pack {
+            width: 100%;
+            max-width: 400px;
+            height: 120px;
+            margin: auto;
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid rgba(255,255,255,0.4);
+            box-shadow: 0 10px 40px rgba(217, 119, 6, 0.4);
+            transition: transform 0.1s;
+        }
+
+        .btn-pack:active { transform: scale(0.95); }
+
+        #pack-screen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .reveal-stage {
+            display: none;
+            text-align: center;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .player-card {
+            width: 320px;
+            height: 475px;
+            background: url('https://fifarenderz.com/static/img/cards/Lvl99.png') no-repeat center center;
+            background-size: contain;
+            position: relative;
+            display: none;
+            animation: cardReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes cardReveal {
+            0% { transform: rotateY(180deg) scale(0.5); opacity: 0; }
+            100% { transform: rotateY(0deg) scale(1); opacity: 1; }
+        }
+
+        .ovr-val { position: absolute; top: 60px; left: 50px; font-size: 70px; font-weight: 900; color: #2e1800; line-height: 1; }
+        .pos-val { position: absolute; top: 125px; left: 60px; font-size: 24px; font-weight: bold; color: #2e1800; opacity: 0.8; }
+        
+        .name-val {
+            position: absolute;
+            top: 24px;
+            width: 100%;
+            text-align: center;
+            font-size: 30px;
+            font-weight: 900;
+            color: #2e1800;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            z-index: 30;
+            padding: 0 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .face-img {
+            position: absolute;
+            top: 75px; 
+            right: 15px;
+            width: 230px;
+            height: 230px;
+            object-fit: contain;
+            z-index: 10;
+        }
+
+        .stats-box {
+            position: absolute;
+            bottom: 80px;
+            width: 100%;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px 20px;
+            color: #2e1800;
+            font-size: 22px;
+            font-weight: bold;
+            z-index: 20;
+        }
+
+        .post-reveal-nav {
+            display: none;
+            gap: 12px;
+            width: 320px;
+            margin-top: 20px;
+            z-index: 200;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 18px;
+            text-transform: uppercase;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:active { transform: scale(0.9); }
+        .btn-ok { background: linear-gradient(to bottom, #fbbf24, #d97706); color: white; box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4); }
+        .btn-back { background: #1a1a1a; color: white; border: 2px solid #fbbf24; }
+
+    </style>
+</head>
+<body>
+
+<div id="lobby">
+    <div class="flex justify-between items-start z-10">
+        <div>
+            <h1 class="text-6xl font-black italic tracking-tighter">FC <span class="text-yellow-500">25</span></h1>
+            <p class="text-white/40 font-bold uppercase tracking-widest text-sm">North London Update</p>
+        </div>
+        <div class="text-right">
+            <div class="bg-red-600 px-3 py-1 rounded font-black italic text-sm">LIVE EVENT</div>
+            <p class="text-white font-bold mt-1 text-lg leading-tight uppercase">Arsenal & Spurs</p>
+        </div>
+    </div>
+
+    <div class="btn-pack" onclick="openPack()">
+        <span class="text-black text-5xl font-black italic">MỞ GÓI THẺ</span>
+        <span class="text-black/60 text-sm font-bold uppercase tracking-[0.2em]">Săn Rice, Ødegaard & Lukaku</span>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 z-10">
+        <div class="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+            <p class="text-yellow-500 font-bold text-[10px] uppercase">Arsenal Captain</p>
+            <p class="text-xl font-black italic">MARTIN ØDEGAARD</p>
+        </div>
+        <div class="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10">
+            <p class="text-yellow-500 font-bold text-[10px] uppercase">Midfield Wall</p>
+            <p class="text-xl font-black italic text-blue-400">DECLAN RICE</p>
+        </div>
+    </div>
+</div>
+
+<div id="pack-screen">
+    <div id="s1" class="reveal-stage">
+        <p class="text-xl font-bold text-white/20 mb-6 tracking-[0.5em]">QUỐC GIA</p>
+        <img id="r-flag" src="" class="w-72 h-44 object-cover rounded-lg shadow-2xl border-2 border-white/10 mx-auto">
+    </div>
+
+    <div id="s2" class="reveal-stage">
+        <p class="text-xl font-bold text-white/20 mb-6 tracking-[0.5em]">VỊ TRÍ</p>
+        <h2 id="r-pos" class="text-[15rem] font-black italic text-yellow-500 leading-none">CDM</h2>
+    </div>
+
+    <div id="s3" class="reveal-stage">
+        <p class="text-xl font-bold text-white/20 mb-6 tracking-[0.5em]">CÂU LẠC BỘ</p>
+        <div id="r-club" class="text-4xl font-black italic uppercase text-white border-y-2 border-white/10 py-6 px-10 text-center">ARSENAL</div>
+    </div>
+
+    <div id="final-card" class="player-card">
+        <div id="c-name" class="name-val">PLAYER NAME</div>
+        <div id="c-ovr" class="ovr-val">99</div>
+        <div id="c-pos" class="pos-val">CDM</div>
+        <img id="c-face" src="" class="face-img">
+        
+        <div class="stats-box">
+            <div class="flex justify-between"><span>PAC</span><span id="st-pac">99</span></div>
+            <div class="flex justify-between"><span>DRI</span><span id="st-dri">99</span></div>
+            <div class="flex justify-between"><span>SHO</span><span id="st-sho">99</span></div>
+            <div class="flex justify-between"><span>DEF</span><span id="st-def">99</span></div>
+            <div class="flex justify-between"><span>PAS</span><span id="st-pas">99</span></div>
+            <div class="flex justify-between"><span>PHY</span><span id="st-phy">99</span></div>
+        </div>
+    </div>
+
+    <div id="final-nav" class="post-reveal-nav">
+        <div onclick="backToCard()" class="nav-btn btn-back">XEM LẠI</div>
+        <div onclick="closePack()" class="nav-btn btn-ok">QUAY TIẾP</div>
+    </div>
+</div>
+
+<script>
+    const PLAYERS = [
+        { 
+            name: "DECLAN RICE", 
+            ovr: 98, 
+            pos: "CDM", 
+            club: "ARSENAL", 
+            flag: "https://flagcdn.com/w640/gb-eng.png", 
+            face: "https://fifarenderz.com/static/img/players/p234396.png",
+            stats: [84, 82, 78, 86, 96, 92]
+        },
+        { 
+            name: "MARTIN ØDEGAARD", 
+            ovr: 100, 
+            pos: "CAM", 
+            club: "ARSENAL", 
+            flag: "https://flagcdn.com/w640/no.png", 
+            face: "https://fifarenderz.com/static/img/players/p222492.png",
+            stats: [86, 92, 102, 104, 60, 75]
+        },
+        { 
+            name: "JAMES MADDISON", 
+            ovr: 97, 
+            pos: "CAM", 
+            club: "TOTTENHAM", 
+            flag: "https://flagcdn.com/w640/gb-eng.png", 
+            face: "https://fifarenderz.com/static/img/players/p220697.png",
+            stats: [82, 90, 100, 98, 55, 72]
+        },
+        { 
+            name: "ROMELU LUKAKU", 
+            ovr: 96, 
+            pos: "ST", 
+            club: "AS ROMA", 
+            flag: "https://flagcdn.com/w640/be.png", 
+            face: "https://fifarenderz.com/static/img/players/p192505.png",
+            stats: [90, 101, 75, 88, 40, 102]
+        },
+        { 
+            name: "RUUD GULLIT", 
+            ovr: 108, 
+            pos: "CM", 
+            club: "AC MILAN", 
+            flag: "https://flagcdn.com/w640/nl.png", 
+            face: "https://fifarenderz.com/static/img/players/p214048.png",
+            stats: [98, 102, 105, 104, 98, 106]
+        },
+        { 
+            name: "CRISTIANO RONALDO", 
+            ovr: 107, 
+            pos: "ST", 
+            club: "AL NASSR", 
+            flag: "https://flagcdn.com/w640/pt.png", 
+            face: "https://fifarenderz.com/static/img/players/p20801.png",
+            stats: [102, 112, 88, 105, 42, 95]
+        },
+        { 
+            name: "SON HEUNG-MIN", 
+            ovr: 101, 
+            pos: "LW", 
+            club: "TOTTENHAM", 
+            flag: "https://flagcdn.com/w640/kr.png", 
+            face: "https://fifarenderz.com/static/img/players/p200104.png",
+            stats: [105, 102, 94, 104, 48, 78]
+        },
+        { 
+            name: "LUKA MODRIĆ", 
+            ovr: 102, 
+            pos: "CM", 
+            club: "REAL MADRID", 
+            flag: "https://flagcdn.com/w640/hr.png", 
+            face: "https://fifarenderz.com/static/img/players/p177003.png",
+            stats: [82, 88, 110, 98, 80, 75]
+        },
+        { 
+            name: "LIONEL MESSI", 
+            ovr: 105, 
+            pos: "RW", 
+            club: "INTER MIAMI", 
+            flag: "https://flagcdn.com/w640/ar.png", 
+            face: "https://fifarenderz.com/static/img/players/p158023.png",
+            stats: [99, 105, 108, 110, 45, 82]
+        }
+    ];
+
+    function openPack() {
+        const p = PLAYERS[Math.floor(Math.random() * PLAYERS.length)];
+        
+        document.getElementById('lobby').style.display = 'none';
+        document.getElementById('pack-screen').style.display = 'flex';
+        document.getElementById('final-nav').style.display = 'none';
+        
+        const stages = ['s1', 's2', 's3', 'final-card'];
+        stages.forEach(s => document.getElementById(s).style.display = 'none');
+
+        // Animation sequence
+        setTimeout(() => {
+            document.getElementById('r-flag').src = p.flag;
+            document.getElementById('s1').style.display = 'block';
+        }, 400);
+
+        setTimeout(() => {
+            document.getElementById('s1').style.display = 'none';
+            document.getElementById('r-pos').innerText = p.pos;
+            document.getElementById('s2').style.display = 'block';
+        }, 1500);
+
+        setTimeout(() => {
+            document.getElementById('s2').style.display = 'none';
+            document.getElementById('r-club').innerText = p.club;
+            document.getElementById('s3').style.display = 'block';
+        }, 2600);
+
+        setTimeout(() => {
+            document.getElementById('s3').style.display = 'none';
+            document.getElementById('c-name').innerText = p.name;
+            document.getElementById('c-ovr').innerText = p.ovr;
+            document.getElementById('c-pos').innerText = p.pos;
+            document.getElementById('c-face').src = p.face;
+            
+            const statsIds = ['st-pac', 'st-sho', 'st-pas', 'st-dri', 'st-def', 'st-phy'];
+            p.stats.forEach((v, i) => document.getElementById(statsIds[i]).innerText = v);
+
+            document.getElementById('final-card').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('final-nav').style.display = 'flex';
+            }, 800);
+        }, 3800);
+    }
+
+    function backToCard() {
+        const card = document.getElementById('final-card');
+        card.style.transform = "scale(1.08) translateY(-10px)";
+        setTimeout(() => card.style.transform = "scale(1) translateY(0px)", 300);
+    }
+
+    function closePack() {
+        document.getElementById('pack-screen').style.display = 'none';
+        document.getElementById('lobby').style.display = 'flex';
+    }
+</script>
+</body>
+</html>
